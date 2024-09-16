@@ -36,3 +36,17 @@
     transform: rotate(360deg);
   }
 }
+@keyframes slideIn {
+  from {
+    transform: translateX(-20px); /* Adjust the starting position as needed */
+    opacity: 0; /* Start with text hidden */
+  }
+  to {
+    transform: translateX(0); /* End at the original position */
+    opacity: 1; /* Fully visible */
+  }
+}
+
+.heroText {
+  animation: slideIn 1s ease-out; /* Adjust duration and timing function as needed */
+}

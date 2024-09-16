@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Typography, Button, Box, Grid2, CardMedia } from "@mui/material";
 
 const Technologies = () => {
   const [active, setActive] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef(null);
 
   const handleClick = (index) => {
     setActive(index);
@@ -78,12 +80,37 @@ const Technologies = () => {
       },
     ],
   ];
+  useEffect(() => {
+    const currentRef = sectionRef.current; // Copy the ref value to a variable
 
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect(); // Stop observing once visible
+        }
+      },
+      { threshold: 0.1 } // Trigger when 10% of the element is visible
+    );
+
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, []);
   return (
     <Box
+      ref={sectionRef}
       sx={{
         textAlign: "center",
         mt: 5,
+        transform: isVisible ? "translateX(0)" : "translateX(-200px)", // Move text from left initially
+        transition: "transform 1.5s ease-in-out, opacity 1.5s ease-out",
       }}
     >
       <Typography
