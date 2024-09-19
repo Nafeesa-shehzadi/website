@@ -1,7 +1,124 @@
-import { Box, Typography, Button, CardMedia, IconButton } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Button,
+  CardMedia,
+  IconButton,
+  styled,
+} from "@mui/material";
 import React, { useState } from "react";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+
+const StyledContainer = styled(Box)(({ theme }) => ({
+  textAlign: "center",
+  overflow: "hidden" /* Prevent horizontal scrolling */,
+}));
+
+const StyledTitle = styled(Typography)(({ theme }) => ({
+  marginTop: "5rem",
+}));
+
+const StyledSubtitle = styled(Typography)(({ theme }) => ({
+  marginBottom: theme.spacing(5),
+  fontWeight: "bold",
+  fontSize: "50px",
+  lineHeight: 2,
+}));
+
+const StyledButtonContainer = styled(Box)(({ theme }) => ({
+  display: "flex",
+  justifyContent: "center",
+  flexWrap: "none",
+  alignItems: "center",
+}));
+
+const StyledButton = styled(Button)(({ theme, active }) => ({
+  fontSize: "1.5rem",
+  margin: theme.spacing(0, 1.5),
+  textTransform: "none",
+  marginBottom: theme.spacing(2),
+  position: "relative",
+  color: active ? theme.palette.primary.main : theme.palette.text.primary,
+
+  "&:after": {
+    content: '""',
+    position: "absolute",
+    left: 0,
+    bottom: -5,
+    width: "100%",
+    height: "2px",
+    backgroundColor: active ? theme.palette.primary.main : "transparent",
+    transition: "background-color 0.3s ease",
+  },
+}));
+
+const StyledImageContainer = styled(Box)(({ theme }) => ({
+  position: "relative",
+  display: "flex",
+  justifyContent: "center",
+  overflow: "hidden",
+  width: "100%",
+  height: "400px",
+  margin: "auto",
+}));
+
+const StyledImage = styled(Box)(({ theme, idx, imageIndex }) => ({
+  position: "absolute",
+  transition: "all 0.5s ease",
+  transform: `translateX(${(idx - imageIndex) * 100}%)`,
+  opacity: idx === imageIndex ? 1 : 0.5,
+  filter: idx === imageIndex ? "none" : "blur(2px)",
+  width: idx === imageIndex ? "70%" : "45%",
+  height: idx === imageIndex ? "100%" : "80%",
+  zIndex: idx === imageIndex ? 2 : 1,
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+}));
+
+const StyledImageCard = styled(CardMedia)(({ theme }) => ({
+  objectFit: "contain",
+  width: "100%",
+  height: "100%",
+}));
+
+const StyledDescriptionContainer = styled(Box)(({ theme, imageIndex }) => ({
+  position: "relative",
+  marginTop: theme.spacing(4),
+  width: "100%",
+  left: `${imageIndex * 100}%`, // Align with the active image
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "flex-start",
+  paddingLeft: theme.spacing(2),
+}));
+
+const StyledTitleDescription = styled(Typography)(({ theme }) => ({
+  fontWeight: "bold",
+  fontSize: "60px",
+  maxWidth: "45%",
+  margin: "0 auto",
+}));
+
+const StyledIconButton = styled(IconButton)(({ theme }) => ({
+  backgroundColor: "black",
+  color: "white",
+  "&:hover": {
+    backgroundColor: "gray",
+  },
+  margin: theme.spacing(0, 2),
+}));
+
+const StyledDescription = styled(Typography)(({ theme }) => ({
+  marginTop: theme.spacing(2),
+  maxWidth: "45%",
+  margin: "0 auto",
+  fontWeight: "normal",
+  fontSize: "1.5rem",
+  lineHeight: 1.5,
+  paddingBottom: "5rem",
+}));
 
 function WorkPortfolio() {
   const [active, setActive] = useState(0);
@@ -70,151 +187,51 @@ function WorkPortfolio() {
   ];
 
   return (
-    <Box sx={{ textAlign: "center" }}>
-      <Typography variant="h3" sx={{ marginTop: "5rem" }}>
-        Our Work
-      </Typography>
-      <Typography
-        variant="h2"
-        sx={{ mb: 5, fontWeight: "bold", fontSize: 50, lineHeight: 2 }}
-      >
-        Portfolio
-      </Typography>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          flexWrap: "none",
-          alignItems: "center",
-        }}
-      >
+    <StyledContainer>
+      <StyledTitle variant="h3">Our Work</StyledTitle>
+      <StyledSubtitle variant="h2">Portfolio</StyledSubtitle>
+      <StyledButtonContainer>
         {["Mobile App", "Web App"].map((text, index) => (
-          <Button
+          <StyledButton
             key={text}
-            color={active === index ? "primary" : "inherit"}
-            sx={{
-              fontSize: "1.5rem",
-              mx: 1.5,
-              textTransform: "none",
-              mb: 2,
-              position: "relative",
-              "&:after": {
-                content: '""',
-                position: "absolute",
-                left: 0,
-                bottom: -5,
-                width: "100%",
-                height: "2px",
-                backgroundColor:
-                  active === index ? "primary.main" : "transparent",
-                transition: "background-color 0.3s ease",
-              },
-            }}
+            active={active === index}
             onClick={() => handleClick(index)}
           >
             {text}
-          </Button>
+          </StyledButton>
         ))}
-      </Box>
-      <Box
-        sx={{
-          position: "relative",
-          display: "flex",
-          justifyContent: "center",
-          overflow: "hidden",
-          width: "100%",
-          height: "400px", // Adjust height as needed
-          mx: "auto",
-        }}
-      >
+      </StyledButtonContainer>
+      <StyledImageContainer>
         {Apps[active].map((item, idx) => (
-          <Box
+          <StyledImage
             key={idx}
-            sx={{
-              position: "absolute",
-              transition: "all 0.5s ease",
-              transform: `translateX(${idx - imageIndex}00%)`,
-              opacity: idx === imageIndex ? 1 : 0.5,
-              filter: idx === imageIndex ? "none" : "blur(2px)",
-              width: idx === imageIndex ? "70%" : "45%",
-              height: idx === imageIndex ? "100%" : "80%",
-              zIndex: idx === imageIndex ? 2 : 1,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
+            idx={idx}
+            imageIndex={imageIndex}
+            active={idx === imageIndex}
           >
-            <CardMedia
-              component="img"
-              image={item.src}
-              alt={item.name}
-              sx={{ objectFit: "contain", width: "100%", height: "100%" }}
-            />
-          </Box>
+            <StyledImageCard component="img" image={item.src} alt={item.name} />
+          </StyledImage>
         ))}
-      </Box>
-      <Box
-        sx={{
-          mt: 4,
-          width: "100%",
-        }}
-      >
-        <Typography
-          sx={{
-            fontWeight: "bold",
-            fontSize: "60px",
-          }}
-        >
+      </StyledImageContainer>
+      <StyledDescriptionContainer>
+        <StyledTitleDescription>
           {Apps[active][imageIndex].name}
           {imageIndex > 0 && (
-            <IconButton
-              onClick={handlePrevImage}
-              sx={{
-                ml: 40,
-                background: "black",
-                color: "white",
-                "&:hover": {
-                  background: "gray",
-                },
-                mr: 1, // Space between the buttons
-              }}
-            >
+            <StyledIconButton onClick={handlePrevImage}>
               <ArrowBackIcon />
-            </IconButton>
+            </StyledIconButton>
           )}
-
           {imageIndex < Apps[active].length - 1 && (
-            <IconButton
-              onClick={handleNextImage}
-              sx={{
-                background: "black",
-                ml: 2, // Add margin to the right of the forward icon
-                color: "white",
-                "&:hover": {
-                  background: "gray",
-                },
-              }}
-            >
+            <StyledIconButton onClick={handleNextImage}>
               <ArrowForwardIcon />
-            </IconButton>
+            </StyledIconButton>
           )}
-          <Typography
-            variant="body1"
-            sx={{
-              mt: 2,
-              maxWidth: "45%", // Ensure description fits within container
-              margin: "0 auto", // Center the description
-              fontWeight: "normal",
-              fontSize: "1.5rem",
-              lineHeight: 1.5, // Adjust line height as needed
-              paddingBottom: "5rem",
-            }}
-          >
-            {Apps[active][imageIndex].desc}
-          </Typography>
-        </Typography>
-      </Box>
-    </Box>
+        </StyledTitleDescription>
+        <StyledDescription variant="body1">
+          {Apps[active][imageIndex].desc}
+        </StyledDescription>
+      </StyledDescriptionContainer>
+    </StyledContainer>
   );
 }
 

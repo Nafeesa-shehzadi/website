@@ -1,5 +1,73 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Typography, Button, Box, Grid2, CardMedia } from "@mui/material";
+import { styled } from "@mui/material/styles";
+
+const StyledBox = styled(Box)(({ theme }) => ({
+  textAlign: "center",
+  mt: "7rem",
+}));
+
+const StyledContainer = styled(Box)(({ theme, isVisible }) => ({
+  transform: isVisible ? "translateX(0)" : "translateX(-200px)",
+  transition: "transform 1.5s ease-in-out, opacity 1.5s ease-out",
+}));
+
+const StyledTypography = styled(Typography)(({ theme }) => ({
+  fontSize: 45,
+  fontWeight: "bold",
+  mb: 5,
+}));
+
+const StyledButton = styled(Button)(({ theme, active }) => ({
+  fontSize: "1.5rem",
+  mx: 3,
+  my: 2,
+  textTransform: "none",
+  mb: 2,
+  textAlign: "justify",
+  position: "relative",
+  ...(active && {
+    "&:after": {
+      content: '""',
+      position: "absolute",
+      left: 0,
+      bottom: -5,
+      width: "100%",
+      height: "2px",
+      backgroundColor: active ? theme.palette.primary.main : "transparent",
+      transition: "background-color 0.3s ease",
+    },
+  }),
+}));
+const StyledGrid = styled(Grid2)(({ theme }) => ({
+  mt: 4,
+  justifyContent: "center",
+  paddingLeft: "10rem",
+  paddingRight: "10rem",
+}));
+
+const StyledCardMedia = styled(CardMedia)(({ theme }) => ({
+  width: "100px",
+  height: "100px",
+  objectFit: "contain",
+  margin: "0 auto",
+}));
+
+const StyledItemBox = styled(Box)(({ theme }) => ({
+  textAlign: "center",
+  padding: "3rem",
+}));
+
+const StyledItemTypography = styled(Typography)(({ theme }) => ({
+  fontWeight: "bold",
+}));
+
+const StyledButtonContainer = styled(Box)(({ theme }) => ({
+  display: "flex",
+  justifyContent: "center",
+  flexWrap: "wrap",
+  alignItems: "center",
+}));
 
 const Technologies = () => {
   const [active, setActive] = useState(0);
@@ -80,6 +148,7 @@ const Technologies = () => {
       },
     ],
   ];
+
   useEffect(() => {
     const currentRef = sectionRef.current; // Copy the ref value to a variable
 
@@ -103,100 +172,46 @@ const Technologies = () => {
       }
     };
   }, []);
+
   return (
-    <Box
-      ref={sectionRef}
-      sx={{
-        textAlign: "center",
-        mt: 5,
-        transform: isVisible ? "translateX(0)" : "translateX(-200px)", // Move text from left initially
-        transition: "transform 1.5s ease-in-out, opacity 1.5s ease-out",
-      }}
-    >
-      <Typography
-        sx={{
-          fontSize: 40,
-          fontWeight: "bold",
-          mb: 5,
-        }}
-      >
-        Technologies We Work With
-      </Typography>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          flexWrap: "wrap",
-          alignItems: "center",
-        }}
-      >
-        {[
-          "Frontend",
-          "Mobile",
-          "CMS",
-          "Back End",
-          "Infra & Devops",
-          "Database",
-        ].map((text, index) => (
-          <Button
-            key={text}
-            color={active === index ? "primary" : "inherit"}
-            sx={{
-              fontSize: "1.5rem",
-              mx: 1.5,
-              textTransform: "none",
-              mb: 2,
-              position: "relative",
-              "&:after": {
-                content: '""',
-                position: "absolute",
-                left: 0,
-                bottom: -5,
-                width: "100%",
-                height: "2px",
-                backgroundColor:
-                  active === index ? "primary.main" : "transparent",
-                transition: "background-color 0.3s ease",
-              },
-            }}
-            onClick={() => handleClick(index)}
-          >
-            {text}
-          </Button>
-        ))}
-      </Box>
-      <Grid2
-        container
-        spacing={2}
-        sx={{
-          mt: 4,
-          justifyContent: "center",
-          paddingLeft: "10rem",
-          paddingRight: "10rem",
-        }}
-      >
-        {(images[active] || []).map((item, idx) => (
-          <Grid2 item xs={12} sm={6} md={4} key={idx}>
-            <Box sx={{ textAlign: "center", padding: "3rem" }}>
-              <CardMedia
-                component="img"
-                image={item.src}
-                alt={item.name}
-                sx={{
-                  width: "100px",
-                  height: "100px",
-                  objectFit: "contain",
-                  margin: "0 auto",
-                }}
-              />
-              <Typography sx={{ mt: 1, fontWeight: "bold" }}>
-                {item.name}
-              </Typography>
-            </Box>
-          </Grid2>
-        ))}
-      </Grid2>
-    </Box>
+    <StyledBox ref={sectionRef}>
+      <StyledContainer isVisible={isVisible}>
+        <StyledTypography>Technologies We Work With</StyledTypography>
+        <StyledButtonContainer>
+          {[
+            "Frontend",
+            "Mobile",
+            "CMS",
+            "Back End",
+            "Infra & Devops",
+            "Database",
+          ].map((text, index) => (
+            <StyledButton
+              key={text}
+              color={active === index ? "primary" : "inherit"}
+              onClick={() => handleClick(index)}
+              active={active === index}
+            >
+              {text}
+            </StyledButton>
+          ))}
+        </StyledButtonContainer>
+        <StyledGrid container spacing={2}>
+          {(images[active] || []).map((item, idx) => (
+            <Grid2 item xs={12} sm={6} md={4} key={idx}>
+              <StyledItemBox>
+                <StyledCardMedia
+                  component="img"
+                  image={item.src}
+                  alt={item.name}
+                />
+                <StyledItemTypography>{item.name}</StyledItemTypography>
+              </StyledItemBox>
+            </Grid2>
+          ))}
+        </StyledGrid>
+      </StyledContainer>
+    </StyledBox>
   );
 };
 

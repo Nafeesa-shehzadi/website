@@ -1,6 +1,35 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Grid2, Box, Typography } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import ServiceCard from "./ServiceCard"; // Adjust path as needed
+
+const StyledBox = styled(Box)(() => ({
+  background: "#03dbfc",
+}));
+
+const StyledContainer = styled(Box)(({ theme, isVisible }) => ({
+  transform: isVisible ? "translateX(0)" : "translateX(-200px)",
+  transition: "transform 1.5s ease-in-out, opacity 1.5s ease-out",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  flexGrow: 1,
+  p: 2,
+  padding: theme.spacing(2),
+}));
+
+const StyledTypography = styled(Typography)(({ theme }) => ({
+  mt: 5,
+  fontSize: 50,
+  fontWeight: "bold",
+  mb: 5,
+  alignItems: "center",
+}));
+
+const StyledGrid = styled(Grid2)(({ theme }) => ({
+  justifyContent: "center",
+}));
 
 const services = [
   {
@@ -93,42 +122,13 @@ const Services = () => {
       }
     };
   }, []);
+
   return (
     <>
-      <Box
-        sx={{
-          background: "#03dbfc",
-        }}
-      >
-        <Box
-          ref={sectionRef}
-          sx={{
-            transform: isVisible ? "translateX(0)" : "translateX(-200px)", // Move text from left initially
-            transition: "transform 1.5s ease-in-out, opacity 1.5s ease-out",
-            display: "flex", // Enable Flexbox
-            flexDirection: "column", // Stack items vertically
-            alignItems: "center", // Center items horizontally
-            justifyContent: "center", // Center items vertically (if needed)
-            flexGrow: 1,
-            p: 2,
-          }}
-        >
-          <Typography
-            sx={{
-              mt: 5, // Corrected margin top
-              fontSize: 50,
-              fontWeight: "bold",
-              mb: 5, // Corrected margin bottom
-              alignItems: "center",
-            }}
-          >
-            Our 360° Services
-          </Typography>
-          <Grid2
-            container
-            spacing={2}
-            justifyContent="center" // Center grid items within the container
-          >
+      <StyledBox>
+        <StyledContainer ref={sectionRef} isVisible={isVisible}>
+          <StyledTypography>Our 360° Services</StyledTypography>
+          <StyledGrid container spacing={2}>
             {services.map((service, index) => (
               <Grid2 item xs={12} sm={6} md={4} key={index}>
                 <ServiceCard
@@ -138,10 +138,11 @@ const Services = () => {
                 />
               </Grid2>
             ))}
-          </Grid2>
-        </Box>
-      </Box>
+          </StyledGrid>
+        </StyledContainer>
+      </StyledBox>
     </>
   );
 };
+
 export default Services;
